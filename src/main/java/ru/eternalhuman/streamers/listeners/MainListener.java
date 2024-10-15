@@ -55,6 +55,7 @@ public class MainListener implements Listener {
             player.sendMessage(LocalConfig.CHAT_PREFIX + " - /contacts - контакты разработчика для помощи.");
             player.sendMessage("");
             player.sendMessage(LocalConfig.CHAT_PREFIX + "Все миры успешно настроены под хардкор режим.");
+            player.sendMessage(LocalConfig.CHAT_PREFIX + "Плагин - spigotmc.org/resources/onehp.120211/");
         }
     }
 

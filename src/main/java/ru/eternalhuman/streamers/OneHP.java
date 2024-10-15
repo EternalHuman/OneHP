@@ -39,6 +39,7 @@ public class OneHP extends JavaPlugin {
                 this.localConfig.saveConfig();
 
                 getLogger().info("Double world resetting!");
+                getLogger().info("Ignore uid.dat error!");
 
                 File directory = new File(SERVER_FOLDER + File.separator + "." + File.separator + "world");
                 FileUtils.forceDelete(directory);
@@ -50,12 +51,8 @@ public class OneHP extends JavaPlugin {
             }
         } catch (IOException ignored) {
         }
-        try {
-            new File(SERVER_FOLDER + File.separator + "." + File.separator + "world" + File.separator + "playerdata").mkdirs();
-            File uidDatFile = new File(SERVER_FOLDER + File.separator + "." + File.separator + "world" + File.separator + "uid.dat");
-            if (!uidDatFile.exists()) uidDatFile.createNewFile();
-        } catch (Exception ignored) {
-        }
+
+        confirmPlayerDataFolder();
     }
 
     public void onEnable() {
@@ -64,10 +61,7 @@ public class OneHP extends JavaPlugin {
         new Verifier();
         this.localConfig.initSidebar();
 
-        try {
-            new File(SERVER_FOLDER + File.separator + "." + File.separator + "world" + File.separator + "playerdata").mkdirs();
-        } catch (Exception ignored) {
-        }
+        confirmPlayerDataFolder();
 
         LiteBukkitFactory.builder()
                 .settings(settings -> settings
@@ -138,5 +132,12 @@ public class OneHP extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new MainListener(this, this.localConfig), this);
         getLogger().info("Plugin loaded successfully.");
+    }
+
+    private void confirmPlayerDataFolder() {
+        try {
+            new File(SERVER_FOLDER + File.separator + "." + File.separator + "world" + File.separator + "playerdata").mkdirs();
+        } catch (Exception ignored) {
+        }
     }
 }
