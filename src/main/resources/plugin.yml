@@ -1,0 +1,4 @@
+name: OneHP
+main: ru.eternalhuman.streamers.OneHP
+version: 1
+api-version: 1.13
