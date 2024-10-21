@@ -16,7 +16,6 @@ import org.bukkit.Statistic;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.configuration.file.FileConfiguration;
 import ru.eternalhuman.streamers.OneHP;
-import ru.eternalhuman.streamers.progress.Progress;
 import ru.eternalhuman.streamers.utils.DateUtils;
 
 @Getter
@@ -81,11 +80,18 @@ public class LocalConfig {
                             .append(Component.text(mobKills).color(NamedTextColor.GREEN)));
         });
         sidebar.addUpdatableLine((player) -> {
-            int mobKills = (int) (oneHP.getProgress().getBossBar().getProgress() * 100);
+            long nowProgress = Math.round(oneHP.getProgress().getProgress());
+            long bestProgress = Math.round(oneHP.getProgress().getBestProgress());
+            long progressDiff = bestProgress - nowProgress;
+
+            String diffString = progressDiff == 0 ? "" : progressDiff < 0 ?
+                    " §7(§a+" + -progressDiff + "%§7)" :
+                    " §7(§c-" + progressDiff + "%§7)";
 
             return Component.text(" " + SPLITTER).color(NamedTextColor.GRAY).append(
                     Component.text(" Прогресс: ").color(NamedTextColor.GOLD)
-                            .append(Component.text(mobKills + "%").color(NamedTextColor.GREEN)));
+                            .append(Component.text(nowProgress + "%").color(NamedTextColor.GREEN)
+                                    .append(Component.text(diffString))));
         });
 
         sidebar.addBlankLine();

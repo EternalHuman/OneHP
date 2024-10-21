@@ -92,7 +92,7 @@ public class OneHP extends JavaPlugin {
 
                                         }
                                     });
-                                    Bukkit.getScheduler().runTaskLater(this, Bukkit::shutdown, 20 * 3);
+                                    Bukkit.shutdown();
                                 }),
                         new LiteCommand<CommandSender>("contacts")
                                 .execute(context -> {
@@ -106,6 +106,15 @@ public class OneHP extends JavaPlugin {
                                     localConfig.setCurrentTry(tries);
                                     localConfig.saveConfig();
                                     context.invocation().sender().sendMessage("Попытка изменена на " + tries + ".");
+                                }),
+                        new LiteCommand<CommandSender>("bestprogress")
+                                .argument("progress", Double.class)
+                                .execute(context -> {
+                                    double bestProgress = context.argument("progress", Double.class);
+                                    localConfig.getConfig().set("best_progress", bestProgress);
+                                    localConfig.saveConfig();
+                                    progress.setBestProgress(bestProgress);
+                                    context.invocation().sender().sendMessage("Лучший прогресс изменён на " + bestProgress + "%");
                                 }),
                         new LiteCommand<CommandSender>("changename")
                                 .argument("name", String.class)
@@ -136,6 +145,10 @@ public class OneHP extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(progress, this);
         Bukkit.getPluginManager().registerEvents(new MainListener(this, this.localConfig, progress), this);
         getLogger().info("Plugin loaded successfully.");
+    }
+
+    public void onDisable() {
+        localConfig.saveConfig();
     }
 
     private void confirmPlayerDataFolder() {
